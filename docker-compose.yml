@@ -1,0 +1,56 @@
+version: '3.5'
+
+networks:
+  caching-network:
+     name: Caching.Network
+     driver: bridge
+volumes:
+  cache_data:
+services:
+  caching-example:
+    image: docker.io/library/cachingexample
+    build: 
+        context: .
+        dockerfile: ./CachingExample/Dockerfile
+    restart: always
+    container_name: CachingExample
+    depends_on: [redis,caching-db]
+    environment:
+       ASPNETCORE_ENVIRONMENT: Production
+       ASPNETCORE_URLS: http://+:80
+    networks:
+      - caching-network
+    ports:
+      - 8088:80
+    links:
+      - redis
+      - caching-db 
+
+  redis:
+     image: redis
+     container_name: Redis
+     hostname: redis
+     restart: always
+     networks:
+      - caching-network
+     ports:
+        - 6379:6379
+     volumes:
+        -  cache_data:/Redis/usr/local/etc/redis/redis.conf
+
+  caching-db:
+     image: mcr.microsoft.com/mssql/server:2022-latest
+     container_name: Caching.SqlDB
+     hostname: caching-db
+     restart: always
+     networks:
+      - caching-network
+     ports:
+        - 1434:1433
+     volumes:
+        - cache_data:/DB/var/lib/sqldb
+        - cache_data:/DB/var/log/sqldb
+     environment:
+        MSSQL_PID : Express
+        ACCEPT_EULA : Y
+        MSSQL_SA_PASSWORD: P@ssw0rd
