@@ -2,7 +2,8 @@
 
 public interface ICacheService
 {
-    T? GetData<T>(string key);
-    bool SetData<T>(string key, T value);
-    bool RemoveData(string key);
+    Task<T?> GetAsync<T>(string key, CancellationToken cancellationToken = default);
+    Task<T?> GetOrCreateAsync<T>(string key, Func<Task<T>> factory, int expirationInMinutes, CancellationToken cancellationToken = default);
+    Task SetAsync<T>(string key, T value, int expirationInMinutes, CancellationToken cancellationToken = default);
+    Task RemoveAsync(string key, CancellationToken cancellationToken = default);
 }

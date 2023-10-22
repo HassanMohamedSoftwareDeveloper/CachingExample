@@ -1,27 +1,24 @@
 @CachingExample_HostAddress = https://localhost:7159
 
+##Get All Drivers
 GET {{CachingExample_HostAddress}}/driver/
 Accept: application/json
 
-###
-
-GET {{CachingExample_HostAddress}}/driver/2
+##Get Driver By ID
+GET {{CachingExample_HostAddress}}/driver/3
 Accept: application/json
 
-###
-
-
+##Add Driver
 POST {{CachingExample_HostAddress}}/driver
 Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "Driver 2",
-  "driverNumber": 200
+  "name": "Driver 3",
+  "driverNumber": 300
 }
-###
-
-DELETE {{CachingExample_HostAddress}}/driver/1
+##Delete Driver
+DELETE {{CachingExample_HostAddress}}/driver/1002
 Accept: application/json
 
 ###

@@ -14,7 +14,9 @@ builder.Services.AddDbContext<CachingDbContext>(config =>
         options.MigrationsHistoryTable("CachingMigrations", "CACHING");
     });
 });
-builder.Services.AddScoped<ICacheService, CacheService>();
+//builder.Services.AddSingleton<ICacheService, RedisManualCacheService>();
+//builder.Services.AddSingleton<ICacheService, InMemoryCacheService>();
+builder.Services.AddSingleton<ICacheService, DistributedCacheService>();
 
 //builder.Services.AddScoped<DriverRepository>();
 //builder.Services.AddScoped<IDriverRepository, CachedDriverRepository>();
@@ -22,15 +24,14 @@ builder.Services.AddScoped<ICacheService, CacheService>();
 //builder.Services.AddScoped<IDriverRepository>(provider =>
 //{
 //    var driverRepository = provider.GetRequiredService<DriverRepository>();
-//    var memoryCache = provider.GetRequiredService<IMemoryCache>();
 //    var configuration = provider.GetRequiredService<IConfiguration>();
-//    return new CachedDriverRepository(driverRepository, memoryCache, configuration);
+//    var cacheService = provider.GetRequiredService<ICacheService>();
+//    return new CachedDriverRepository(driverRepository, configuration, cacheService);
 //});
 
 //Scurtor
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
-//builder.Services.Decorate<IDriverRepository, CachedInMemoryDriverRepository>();
-builder.Services.Decorate<IDriverRepository, CachedInRedisDriverRepository>();
+builder.Services.Decorate<IDriverRepository, CachedDriverRepository>();
 
 
 

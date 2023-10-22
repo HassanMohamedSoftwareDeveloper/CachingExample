@@ -24,7 +24,7 @@ public class DriverController(IDriverRepository driverRepository) : ControllerBa
     {
         return Ok(await driverRepository.AddDriver(value));
     }
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         return await driverRepository.DeleteDriver(id)
